@@ -1,5 +1,5 @@
 use axum::{extract::{Path, State}, response::Html, routing::get, Router};
-use ferriki_core::load_markdown;
+use ferriki_core::{list_markdown_slugs, load_markdown};
 use pulldown_cmark::{Parser, html::push_html};
 use tokio::net::TcpListener;
 use tera::{Tera, Context};
@@ -30,7 +30,7 @@ async fn wiki_handler(
 
 fn resolve_template_path() -> String {
     let mut path = env::current_dir().expect("현재 작업 디렉토리 확인 실패");
-    
+
     // "templates" 폴더가 나올 때까지 상위 폴더로 이동
     for _ in 0..3 {
         let try_path = path.join("templates");
@@ -39,8 +39,28 @@ fn resolve_template_path() -> String {
         }
         path = path.parent().unwrap().to_path_buf();
     }
-    
+
     "ferriki-web/templates/**/*".to_string()
+}
+
+async fn wiki_list_handler(State(tera): State<Arc<Tera>>) -> Html<String> {
+    let slugs = list_markdown_slugs();
+
+    let mut ctx = Context::new();
+    ctx.insert("slugs", &slugs);
+
+    let rendered = tera.render("list.html", &ctx).unwrap();
+
+    Html(rendered)
+}
+
+async fn wiki_index(State(tera): State<Arc<Tera>>) -> Html<String> {
+    let mut ctx = Context::new();
+    ctx.insert("title", "ferriki");
+
+    let rendered = tera.render("wiki.html", &ctx).unwrap();
+
+    Html(rendered)
 }
 
 #[tokio::main]
@@ -50,6 +70,7 @@ async fn main() {
 
     let app = Router::new()
         .route("/", get(|| async { "Hello, Ferriki!"}))
+        .route("/wiki", get(wiki_list_handler))
         .route("/wiki/{slug}", get(wiki_handler))
         .with_state(tera.clone());
 
