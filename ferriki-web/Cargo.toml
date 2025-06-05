@@ -4,3 +4,8 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+ferriki-core = { path = "../ferriki-core" }
+axum = "0.8.4"
+tera = "1.20.0"
+pulldown-cmark = "0.13.0"
+tokio = { version = "1.45.1", features = ["full"] }
