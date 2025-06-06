@@ -44,10 +44,10 @@ fn resolve_template_path() -> String {
 }
 
 async fn wiki_list_handler(State(tera): State<Arc<Tera>>) -> Html<String> {
-    let slugs = list_markdown_slugs();
+    let entries = list_markdown_slugs();
 
     let mut ctx = Context::new();
-    ctx.insert("slugs", &slugs);
+    ctx.insert("entries", &entries);
 
     let rendered = tera.render("list.html", &ctx).unwrap();
 
