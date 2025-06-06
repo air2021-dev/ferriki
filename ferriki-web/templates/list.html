@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}문서 목록 – Ferriki{% endblock %}
+
+{% block content %}
+<h1>📚 문서 목록</h1>
+<ul>
+    {% for entry in entries %}
+    <li><a href="/wiki/{{ entry.slug }}">📄 {{ entry.title }}</a></li>
+    {% else %}
+    <li>등록된 문서가 없습니다.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
