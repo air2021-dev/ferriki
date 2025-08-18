@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}{{ slug }} 편집 – Ferriki{% endblock %}
+
+{% block content %}
+<h1>📝 편집: {{ slug }}</h1>
+<form method="post" action="/edit/{{ slug }}">
+    <textarea name="content" rows="20" style="width:100%">{{ content }}</textarea>
+    <br />
+    <button type="submit">💾 저장</button>
+</form>
+{% endblock %}

@@ -271,6 +271,9 @@ dependencies = [
 [[package]]
 name = "ferriki-core"
 version = "0.1.0"
+dependencies = [
+ "serde",
+]
 
 [[package]]
 name = "ferriki-web"
